@@ -30,7 +30,7 @@
         end >= start
       -->
     <rule context="hml:variant">
-        <assert test="number(@end) >= number(@start)">On a variant node, end attribute should be greater than or equal to the start attribute.</assert>
+        <assert test="boolean(@start) and boolean(@end) and number(@end) >= number(@start)">On a variant node, end attribute should be greater than or equal to the start attribute.</assert>
 
     <!--
         Rule 5.2.d
@@ -54,7 +54,7 @@
         <report test="$varID = '?'">The variant nodes under a single consensus-sequence-block must have id attributes that are integers ranging from 0:n-1, where n is the number of variants.</report>
         <assert test="$nextVarID=($varID + 1) or $nextVarID='?'" >The variant nodes under a single consensus-sequence-block must have id attributes that are integers ranging from 0:n-1, where n is the number of variants.</assert>
         <assert test="$prevVarID=($varID - 1) or $prevVarID='?'" >The variant nodes under a single consensus-sequence-block must have id attributes that are integers ranging from 0:n-1, where n is the number of variants.</assert>
-        <assert test="../hml:variant[@id = '0']" >The variant nodes under a single consensus-sequence-block must have id attributes that are integers ranging from 0:n-1, where n is the number of variants.</assert> -->
-    </rule>
+        <assert test="../hml:variant[@id = '0']" >The variant nodes under a single consensus-sequence-block must have id attributes that are integers ranging from 0:n-1, where n is the number of variants.</assert> 
+</rule>
 
 </pattern>

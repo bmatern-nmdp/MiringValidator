@@ -36,8 +36,8 @@
         <let name="csbRange" value="$csbEnd - $csbStart" />
         
         <report test="boolean(@sequence-start) and boolean(@sequence-end) and (number(@sequence-start) >= number(@sequence-end))">On a sequence quality node, sequence-end must be greater than sequence-start.</report>
-        <assert test="@sequence-start &lt;= $csbRange">On a sequence quality node, the sequence-start and sequence-end attributes must be between 0 and (consensus-sequence-block:end - consensus-sequence-block:start) inclusive.</assert>
-        <assert test="@sequence-end &lt;= $csbRange">On a sequence quality node, the sequence-start and sequence-end attributes must be between 0 and (consensus-sequence-block:end - consensus-sequence-block:start) inclusive.</assert>
+        <assert test="boolean(parent::*/@start) and boolean(parent::*/@end) and boolean(@sequence-start) and @sequence-start &lt;= $csbRange">On a sequence quality node, the sequence-start and sequence-end attributes must be between 0 and (consensus-sequence-block:end - consensus-sequence-block:start) inclusive.</assert>
+        <assert test="boolean(parent::*/@start) and boolean(parent::*/@end) and boolean(@sequence-end) and @sequence-end &lt;= $csbRange">On a sequence quality node, the sequence-start and sequence-end attributes must be between 0 and (consensus-sequence-block:end - consensus-sequence-block:start) inclusive.</assert>
     </rule>
     
     <!--
@@ -84,7 +84,7 @@
     <rule context="//hml:consensus-sequence-block/hml:sequence">
         <let name="seq" value="replace(normalize-space(.),' ','')" />
         <let name="seqLength" value="string-length($seq)" />
-        <assert test="..[@end - @start = $seqLength]">For every consensus-sequence-block node, the child sequence node must have a length of (end - start).</assert>
+        <assert test="..[@end - @start = $seqLength]">For every consensus-sequence-block node, the child sequence node must have a length of (end - start).  This corresponds to the indices and length of the reference sequence, so sequence insertions and deletions might affect the consensus-sequence-block:sequence length.</assert>
     </rule>
 
 </pattern>
