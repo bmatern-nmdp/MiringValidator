@@ -123,7 +123,7 @@ public class SchemaValidator
             //Empty.  Not null.  No problems found.
             return new ValidationResult[0];
         }
-    }
+    }  
 
     /** 
      * MiringValidationContentHandler is a subclass of SchemaValidator, which is responsible for handling 
