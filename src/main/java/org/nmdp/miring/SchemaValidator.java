@@ -123,7 +123,7 @@ public class SchemaValidator
             //Empty.  Not null.  No problems found.
             return new ValidationResult[0];
         }
-    }  
+    }
 
     /** 
      * MiringValidationContentHandler is a subclass of SchemaValidator, which is responsible for handling 
@@ -240,6 +240,7 @@ public class SchemaValidator
             String errorMessage = exception.getMessage();
             String[] exceptionTokens = Utilities.tokenizeString(errorMessage, " ");
             
+            //This is a common error for a malformed XML.  There is some rogue text before the real HML begins.
             if(errorMessage.equals("Content is not allowed in prolog."))
             {
                 ve = new ValidationResult("Content is not allowed in prolog.",Severity.FATAL);
@@ -309,13 +310,32 @@ public class SchemaValidator
                 //There are more types of errors probably. 
                 //What if I have too many of a thing?
                 logger.error("This Sax Parser Exception isn't handled gracefully :" + exception.getMessage());
-                ve = new ValidationResult("Unhandled Sax Parser Error: " + exception.getMessage(), Severity.FATAL);
-                ve.setSolutionText("Verify that your HML file is well formed, and conforms to http://schemas.nmdp.org/spec/hml/1.0.1/hml-1.0.1.xsd");
-                ve.setMiringRule("?");
+                
+                ve = handleGenericError(exception);
             }
 
             Utilities.addValidationError(validationErrors, ve);
         }
+
+        /**
+         * Create a ValidationResult object based on generic SAX Parser exception.
+         *
+         * @param exception A SAXException object.
+         * 
+         * @return a ValidationResult object corresponding to this parser exception.
+         */
+		private static ValidationResult handleGenericError(SAXException exception) 
+		{
+			ValidationResult ve;
+			ve = new ValidationResult("Unhandled Sax Parser Error: " + exception.getMessage(), Severity.FATAL);
+			ve.setSolutionText("This is a generic HML Parser error.  Verify that your HML file is well formed, and conforms to http://schemas.nmdp.org/spec/hml/1.0.1/hml-1.0.1.xsd");
+			ve.setMiringRule("?");
+
+            String xPath = xmlCurrentNode.generateXpath();
+            ve.addXPath(xPath);
+            
+			return ve;
+		}
 
         /**
          * Create a ValidationResult object based on a missing attribute.

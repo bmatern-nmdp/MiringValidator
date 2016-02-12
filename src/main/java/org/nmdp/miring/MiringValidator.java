@@ -74,7 +74,9 @@ public class MiringValidator
         
         //Tier 2
         //If tier 1 has fatal errors, we should not continue to tier 2.
-        if(!Utilities.hasFatalErrors(tier1ValidationErrors))
+        //Actually no.  We should just do the tier 2, there are probably good info in there.  
+        //I don't want to miss out on the T2 errors, they are valuable.  
+        //if(!Utilities.hasFatalErrors(tier1ValidationErrors))
         {
             logger.debug("Attempting Tier 2 validation");
             
@@ -86,10 +88,10 @@ public class MiringValidator
             //tier3();
             }*/
         }
-        else
-        {
-            logger.error("Did not perform tier 2 validation, fatal errors in tier 1.");
-        }
+        //else
+        //{
+        //    logger.error("Did not perform tier 2 validation, fatal errors in tier 1.");
+        //}
 
         //Make a report.
         String hmlIdRoot = Utilities.getHMLIDRoot(xml);
